@@ -1,52 +1,73 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { StyleSheet, View, ScrollView , Button, Text, Pressable, Alert} from 'react-native';
+import React, {useState} from 'react';
+import { Colors } from '@/constants/Colors';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { FormTextInput } from '../utilities/FormTextInput';
+import { FormDateInput } from '../utilities/FormDateInput';
+import { ButtonPrimary } from '../utilities/ButtonPrimary';
 
 export default function HomeScreen() {
+
+  const [isToggleEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaProvider>
+      <ScrollView 
+        style={{ backgroundColor: 'white'}} 
+        showsVerticalScrollIndicator={false} 
+        bounces={false}>
+        <View style={styles.topViewStyle}>
+          <View style={styles.secoundTopViewStyle}>
+            <View style={styles.switchViewStyle}>
+                <View style={isToggleEnabled? styles.toggleViewEnableStyle : styles.toggleViewDisableStyle}>
+                  <Button
+                    onPress={toggleSwitch} 
+                    title='One Way'
+                    color={isToggleEnabled? 'white': 'black'} />
+                </View>
+                <View style={isToggleEnabled? styles.toggleViewDisableStyle : styles.toggleViewEnableStyle}>
+                  <Button
+                    onPress={toggleSwitch} 
+                    title='Round Trip' 
+                    color={isToggleEnabled? 'black': 'white'}/>
+                </View>
+            </View>
+          </View>
+        </View>
+        <View style={styles.bottomViewStyle}>
+          <View style={styles.formViewStyle}>
+            <FormTextInput placeHolder={'Select from city'} label="From"/>
+            <FormTextInput placeHolder={'Select to city'} label="To"/>
+            <FormDateInput placeHolder={'Date'} label="Departure Date" />
+            <FormDateInput placeHolder={'Date'} label="Return Date" isVisible={!isToggleEnabled} />
+            <View style={styles.quickDateParentViewStyle}>
+              <View style={styles.quickDateViewStyle}>
+                <Text style={styles.quickDateTextStyle}>Today</Text>
+              </View>
+              <View style={styles.quickDateViewStyle}>
+                <Text style={styles.quickDateTextStyle}>Tomorrow</Text>
+              </View>
+            </View>
+            <ButtonPrimary text="Search" onPress={() => {
+              Alert.alert('Search button clicked')
+            }} />
+          </View>
+        </View>
+        <View style={{marginHorizontal:20, marginTop:20}}>
+          <Text>Your Recent Searches</Text>
+          <View style={styles.quickDateParentViewStyle}>
+            <View style={styles.quickDateViewStyle}>
+              <Text style={styles.quickDateTextStyle}>Pune - Hyderabad</Text>
+            </View>
+            <View style={styles.quickDateViewStyle}>
+              <Text style={styles.quickDateTextStyle}>Hyderabad - Pune</Text>
+            </View>
+          </View>
+        </View>
+        <Text style={{marginHorizontal:20, marginTop:20, textAlign:'center'}}>Our Populat Destinations</Text>
+      </ScrollView>
+    </SafeAreaProvider>
   );
 }
 
@@ -66,5 +87,95 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  topViewStyle: {
+    height: 200,
+    backgroundColor: Colors.darkorange,
+    justifyContent: 'flex-end',
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30
+  },
+  secoundTopViewStyle: {
+    marginLeft: 30,
+    marginRight: 30,
+    backgroundColor: Colors.lightGrey,
+    height: 70,
+    borderTopLeftRadius: 20,
+    borderTopEndRadius: 20,
+    justifyContent: 'center'
+  },
+  bottomViewStyle: {
+    backgroundColor: 'white'
+  },
+  formViewStyle: {
+    marginHorizontal:30,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    backgroundColor: 'gainsboro',
+    flex: 1
+  },
+  switchViewStyle:{
+    backgroundColor: Colors.lightGrey,
+    borderRadius:20,
+    height: 40,
+    borderColor: 'black',
+    borderWidth:1,
+    marginTop:20,
+    marginLeft:50,
+    marginRight:50,
+    flexDirection: 'row',
+    alignContent:'center',
+    justifyContent:'center'
+  },
+  toggleViewEnableStyle:{
+    flex: 1,
+    alignContent:'center',
+    justifyContent:'center',
+    backgroundColor:'black',
+    borderRadius:20
+  },
+  toggleViewDisableStyle:{
+    flex: 1,
+    alignContent:'center',
+    justifyContent:'center',
+    backgroundColor:Colors.lightGrey,
+    borderRadius:20
+  },
+  quickDateParentViewStyle:{
+    flexDirection:'row', 
+    marginLeft:16, 
+    marginRight:16,
+    marginTop:10
+  },
+  quickDateViewStyle:{
+    flex:1,
+    justifyContent:'center',
+    alignContent:'center',
+    height:35,
+    borderWidth:1,
+    borderRadius:20,
+    borderColor:'black',
+    margin:10
+  },
+  quickDateTextStyle:{
+    textAlign:'center'
+  },
+  buttonStyle:{
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    //paddingHorizontal: 32,
+    borderRadius: 25,
+    elevation: 3,
+    backgroundColor: 'black',
+    marginHorizontal:16,
+    marginVertical:20
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white'
   },
 });

@@ -12,23 +12,64 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
+        headerShown: true,
+        tabBarStyle: {
+          backgroundColor: Colors.lightGrey,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
+          paddingTop:10,
+          height:90
+        },
+        headerStyle:{
+          backgroundColor: Colors.darkorange,
+          elevation:0,
+          borderBottomLeftRadius:20,
+          borderBottomRightRadius:20,
+          shadowOpacity:0
+        }
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
+          headerTitle:"Verma",
+          headerStyle:{
+            backgroundColor: Colors.darkorange,
+            elevation:0,
+            borderBottomLeftRadius:0,
+            borderBottomRightRadius:0,
+            shadowOpacity:0
+          },
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="help"
         options={{
-          title: 'Explore',
+          title: 'Help',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'headset' : 'headset-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="booking"
+        options={{
+          title: 'Booking',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'document' : 'document-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          headerTitle:"My Account",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'id-card' : 'id-card-outline'} color={color} />
           ),
         }}
       />
